@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Layerhouse | 3D prints made to order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2; --ink:#101B2D; --card:#FFFFFF; --line:#D3DAE0; --muted:#55657A;
+  --mag:#E8438A; --cyan:#35D0D9; --lemon:#F5D547; --navy:#101B2D; --art:#DCE4EA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --paper:#0C1422; --ink:#E8EDF3; --card:#152239; --line:#26364F; --muted:#97A6BA; }
+}
+:root[data-theme="dark"]{ --paper:#0C1422; --ink:#E8EDF3; --card:#152239; --line:#26364F; --muted:#97A6BA; }
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--paper)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
+.wrap{width:min(1120px,100% - 32px);margin-inline:auto}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;background:linear-gradient(180deg,#0B1424 0%,#14263F 60%,#1B3250 100%);overflow:hidden;color:#fff}
+.hero__layers{position:absolute;inset:0;pointer-events:none}
+.layer{position:absolute;inset:0;will-change:transform}
+.layer svg{display:block;width:100%;height:100%}
+.layer--title{display:flex;flex-direction:column;align-items:center;text-align:center;padding:13svh 16px 0}
+.hero__title{margin:0;padding-bottom:.06em;font-weight:800;font-size:clamp(2.7rem,14.5vw,8.5rem);line-height:1;letter-spacing:-.035em;
+  background:linear-gradient(0deg,#fff 0 46%,transparent 46%),repeating-linear-gradient(0deg,#fff 0 4px,transparent 4px 7px);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:print 1.5s steps(18,end) .15s both}
+@keyframes print{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+.hero__tag{margin:.7rem 0 1.1rem;font-size:1.0625rem;color:#C9D6E6}
+.hero__fade{position:absolute;left:0;right:0;bottom:0;height:8%;background:linear-gradient(to bottom,transparent,var(--paper));pointer-events:none}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:0 18px;border:0;border-radius:8px;background:var(--mag);color:var(--navy);font-weight:700;text-decoration:none;cursor:pointer;transition:transform .15s,filter .15s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(1px)}
+.btn--hero{pointer-events:auto}
+.btn--sm{min-height:40px;padding:0 12px;font-size:.9375rem}
+.btn--ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn--ghost:hover{border-color:var(--muted);filter:none}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* ---------- Intro + catalog ---------- */
+.intro{padding:44px 0 20px}
+.intro h2{margin:0;font-size:clamp(1.9rem,6vw,3.1rem);line-height:1.05;letter-spacing:-.025em;font-weight:700;max-width:20ch}
+.intro p{margin:14px 0 0;max-width:52ch;color:var(--muted);font-size:1.0625rem}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 12px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:40px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:transparent;cursor:pointer;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.count{flex:none;color:var(--muted);font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+@media(min-width:1040px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.card__art{background:var(--art);aspect-ratio:1;padding:6%}
+.art{display:block;width:100%;height:100%}
+.card__body{display:flex;flex-direction:column;flex:1;padding:12px 12px 14px}
+.card h3{margin:0;font-size:1.0625rem;line-height:1.2;font-weight:700}
+.card__desc{margin:6px 0 10px;color:var(--muted);font-size:.875rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.swatches{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--card);background:var(--c);box-shadow:0 0 0 1.5px var(--line);cursor:pointer;padding:0}
+.sw[aria-checked="true"]{box-shadow:0 0 0 2.5px var(--ink)}
+.card__color{margin:6px 0 12px;font-size:.8125rem;color:var(--muted)}
+.card__foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.price{font-weight:800;font-size:1.125rem;letter-spacing:-.01em}
+
+/* ---------- Info accordions ---------- */
+.info{padding:48px 0 40px}
+.info h2{margin:0 0 14px;font-size:1.5rem;letter-spacing:-.02em}
+.acc{border-top:1px solid var(--line)}
+.acc:last-of-type{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:8px 2px;font-weight:700;font-size:1.0625rem;cursor:pointer}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"";flex:none;width:12px;height:12px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:rotate(45deg) translateY(-3px);transition:transform .25s}
+.acc[open] summary::after{transform:rotate(-135deg) translateY(-3px)}
+.acc__body{padding:0 2px 18px;color:var(--muted);max-width:60ch}
+.acc__body p{margin:0 0 10px}
+.acc__body ol{margin:0;padding-left:1.2rem}
+.acc__body li{margin-bottom:6px}
+
+/* ---------- Forms ---------- */
+.field{display:block;margin-bottom:12px}
+.field span{display:block;margin-bottom:4px;font-size:.875rem;font-weight:500;color:var(--ink)}
+.field input,.field textarea{width:100%;min-height:44px;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.field textarea{min-height:92px;resize:vertical}
+.status{margin:10px 0 0;font-size:.9rem;color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{flex:1 1 140px}
+
+/* ---------- Footer ---------- */
+.foot{padding:20px 0 96px;color:var(--muted);font-size:.875rem;border-top:1px solid var(--line)}
+
+/* ---------- Order button + sheet ---------- */
+.fab{position:fixed;z-index:30;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;min-height:52px;padding:0 18px 0 8px;border:0;border-radius:999px;background:var(--navy);color:#fff;font-weight:700;box-shadow:0 6px 24px rgba(8,14,26,.35);cursor:pointer;animation:rise .35s cubic-bezier(.2,.8,.2,1)}
+.fab[hidden]{display:none}
+.fab b{display:grid;place-items:center;min-width:36px;height:36px;padding:0 6px;border-radius:999px;background:var(--mag);color:var(--navy)}
+@keyframes rise{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(8,14,26,.55);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.sheet{position:fixed;z-index:50;left:0;right:0;bottom:0;max-height:92vh;max-height:92svh;display:flex;flex-direction:column;background:var(--paper);color:var(--ink);border-radius:18px 18px 0 0;padding-bottom:env(safe-area-inset-bottom,0px);transform:translateY(100%);visibility:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),visibility .3s}
+body.cart-open .scrim{opacity:1;visibility:visible}
+body.cart-open .sheet{transform:none;visibility:visible}
+@media(min-width:760px){.sheet{left:auto;top:0;width:420px;max-height:none;border-radius:18px 0 0 18px;transform:translateX(100%)}}
+.sheet__head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 8px}
+.sheet__head h2{margin:0;font-size:1.25rem}
+.x{width:44px;height:44px;border:0;border-radius:50%;background:transparent;font-size:1.5rem;line-height:1;cursor:pointer}
+.sheet__scroll{overflow-y:auto;overscroll-behavior:contain;padding:0 18px 20px}
+.empty{margin:8px 0 20px;color:var(--muted)}
+.lines{list-style:none;margin:0 0 8px;padding:0}
+.line{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.line__art{flex:none;width:52px;height:52px;padding:4px;border-radius:8px;background:var(--art)}
+.line__info{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.line__info span{color:var(--muted);font-size:.875rem}
+.qty{display:flex;align-items:center;gap:2px}
+.qty button{width:40px;height:40px;border:1.5px solid var(--line);border-radius:8px;background:transparent;font-size:1.125rem;cursor:pointer}
+.qty span{min-width:24px;text-align:center;font-weight:700}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 4px;font-weight:800;font-size:1.25rem}
+.note{margin:0 0 16px;color:var(--muted);font-size:.875rem}
+.toast{position:fixed;z-index:60;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);max-width:calc(100% - 32px);padding:10px 16px;border-radius:10px;background:var(--navy);color:#fff;font-size:.9375rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion: reduce){
+  .hero__title{animation:none}
+  .fab{animation:none}
+  *{transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="ll" width="4" height="4" patternUnits="userSpaceOnUse"><rect y="2.6" width="4" height="1.4" fill="rgba(16,27,45,.16)"/></pattern>
+  </defs>
+</svg>
+
+<header class="hero">
+  <div class="hero__layers" data-parallax-layers>
+
+    <!-- 1: build-plate glow, floor grid, faint layer lines -->
+    <div class="layer" data-parallax-layer="1">
+      <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#E8438A" stop-opacity=".30"/><stop offset="1" stop-color="#E8438A" stop-opacity="0"/></radialGradient>
+          <pattern id="hl" width="8" height="8" patternUnits="userSpaceOnUse"><rect y="6" width="8" height="2" fill="#fff" fill-opacity=".045"/></pattern>
+        </defs>
+        <rect width="1000" height="700" fill="url(#hl)"/>
+        <circle cx="500" cy="470" r="340" fill="url(#glow)"/>
+        <g stroke="#3E5C86" stroke-opacity=".55" stroke-width="1.5">
+          <line x1="0" y1="652" x2="1000" y2="652"/><line x1="0" y1="664" x2="1000" y2="664"/><line x1="0" y1="682" x2="1000" y2="682"/>
+          <line x1="400" y1="640" x2="-250" y2="700"/><line x1="420" y1="640" x2="-100" y2="700"/><line x1="440" y1="640" x2="50" y2="700"/><line x1="460" y1="640" x2="200" y2="700"/><line x1="480" y1="640" x2="350" y2="700"/>
+          <line x1="500" y1="640" x2="500" y2="700"/>
+          <line x1="520" y1="640" x2="650" y2="700"/><line x1="540" y1="640" x2="800" y2="700"/><line x1="560" y1="640" x2="950" y2="700"/><line x1="580" y1="640" x2="1100" y2="700"/><line x1="600" y1="640" x2="1250" y2="700"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- 2: printer frame, spool, hotend -->
+    <div class="layer" data-parallax-layer="2">
+      <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <g fill="#2B4466">
+          <rect x="360" y="380" width="20" height="270" rx="3"/><rect x="620" y="380" width="20" height="270" rx="3"/>
+          <rect x="360" y="372" width="280" height="20" rx="3"/>
+        </g>
+        <g fill="#4A6A96"><rect x="364" y="392" width="4" height="258"/><rect x="624" y="392" width="4" height="258"/></g>
+        <rect x="380" y="452" width="240" height="14" rx="2" fill="#3E5C86"/>
+        <circle cx="500" cy="332" r="40" fill="#C72F72"/>
+        <circle cx="500" cy="332" r="31" fill="#E8438A"/>
+        <g stroke="#101B2D" stroke-opacity=".22" stroke-width="2" fill="none"><circle cx="500" cy="332" r="26"/><circle cx="500" cy="332" r="21"/><circle cx="500" cy="332" r="16"/></g>
+        <circle cx="500" cy="332" r="8" fill="#101B2D"/>
+        <path d="M531,336 C590,350 590,420 524,446" stroke="#E8438A" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <rect x="476" y="440" width="48" height="40" rx="5" fill="#4A6A96"/>
+        <rect x="490" y="480" width="20" height="12" fill="#C9D3E0"/>
+        <path d="M491,492 L509,492 L500,508 Z" fill="#F5D547"/>
+      </svg>
+    </div>
+
+    <!-- 3: title -->
+    <div class="layer layer--title" data-parallax-layer="3">
+      <h1 class="hero__title brand">Layerhouse</h1>
+      <p class="hero__tag" id="tagline">3D prints made to order</p>
+      <a class="btn btn--hero" href="#shop" data-goto>Shop prints</a>
+    </div>
+
+    <!-- 4: vase mid-print, build plate, spare spools -->
+    <div class="layer" data-parallax-layer="4">
+      <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="vg" x1="0" x2="1"><stop offset="0" stop-color="#F06BA4"/><stop offset=".55" stop-color="#E8438A"/><stop offset="1" stop-color="#B72A68"/></linearGradient>
+          <pattern id="vl" width="6" height="6" patternUnits="userSpaceOnUse"><rect y="3.8" width="6" height="2.2" fill="#101B2D" fill-opacity=".28"/></pattern>
+        </defs>
+        <path d="M500,508 L500,522" stroke="#E8438A" stroke-width="3"/>
+        <path d="M462,522 C442,562 418,602 436,640 L564,640 C582,602 558,562 538,522 Z" fill="url(#vg)"/>
+        <path d="M462,522 C442,562 418,602 436,640 L564,640 C582,602 558,562 538,522 Z" fill="url(#vl)"/>
+        <rect x="300" y="640" width="400" height="36" rx="6" fill="#1B2E4A"/>
+        <rect x="300" y="640" width="400" height="5" rx="2" fill="#3E5C86"/>
+        <circle cx="230" cy="648" r="36" fill="#1FA9B3"/><circle cx="230" cy="648" r="28" fill="#35D0D9"/><circle cx="230" cy="648" r="7" fill="#101B2D"/>
+        <circle cx="780" cy="654" r="30" fill="#D2B232"/><circle cx="780" cy="654" r="23" fill="#F5D547"/><circle cx="780" cy="654" r="6" fill="#101B2D"/>
+      </svg>
+    </div>
+  </div>
+  <div class="hero__fade"></div>
+</header>
+
+<main id="shop">
+  <section class="intro wrap">
+    <h2>Made on my printers, in your colors.</h2>
+    <p>Pick a print, choose a filament color, and send your order. I confirm the price and shipping with you before anything goes on the plate.</p>
+  </section>
+
+  <section class="wrap" aria-label="Products">
+    <div class="bar">
+      <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="wrap info" aria-label="Good to know">
+    <h2>Good to know</h2>
+
+    <details class="acc" open>
+      <summary>How ordering works</summary>
+      <div class="acc__body">
+        <ol>
+          <li>Add prints to your order and pick a color for each.</li>
+          <li>Send the order. It reaches me by email.</li>
+          <li>I reply with the final price, shipping and timing.</li>
+          <li>You pay using the details I send, then I print and ship.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="acc">
+      <summary>Materials and finish</summary>
+      <div class="acc__body">
+        <p>Most prints use PLA: rigid, matte and fine for indoor use. PETG is available for outdoor spots or anywhere warm.</p>
+        <p>Standard layer height is 0.2 mm. Ask if you want a finer finish.</p>
+      </div>
+    </details>
+
+    <details class="acc">
+      <summary>Shipping and turnaround</summary>
+      <div class="acc__body">
+        <p>Most orders print within 3 to 5 days. Shipping is quoted per order once I know the weight.</p>
+        <p>Custom prints take longer, and I will tell you how long before you commit.</p>
+      </div>
+    </details>
+
+    <details class="acc" id="custom-d">
+      <summary>Request a custom print</summary>
+      <div class="acc__body">
+        <p>Describe what you need, or link an STL file. I will reply with a quote.</p>
+        <form id="customForm">
+          <label class="field"><span>Your email</span><input type="email" name="email" required autocomplete="email"></label>
+          <label class="field"><span>What should I print?</span><textarea name="what" required placeholder="Size, color, how many, what it is for"></textarea></label>
+          <label class="field"><span>Link to a file (optional)</span><input type="url" name="link" placeholder="https://"></label>
+          <button class="btn" type="submit">Send request</button>
+          <p class="status" id="customStatus" role="status"></p>
+        </form>
+      </div>
+    </details>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <p>&copy; <span id="yr"></span> <span class="brand"></span>. Printed in layers.</p>
+</footer>
+
+<button class="fab" id="fab" hidden aria-label="Open your order">
+  <b id="fabCount">0</b>
+  <span>Your order, <span id="fabTotal"></span></span>
+</button>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" data-lenis-prevent>
+  <div class="sheet__head">
+    <h2 id="sheetTitle">Your order</h2>
+    <button class="x" id="closeCart" aria-label="Close order">&times;</button>
+  </div>
+  <div class="sheet__scroll">
+    <p class="empty" id="empty">Your order is empty. Add a print to get started.</p>
+    <ul class="lines" id="lines"></ul>
+    <div id="checkout" hidden>
+      <div class="total"><span>Subtotal</span><span id="total"></span></div>
+      <p class="note">Shipping is quoted when I confirm your order.</p>
+      <form id="orderForm">
+        <label class="field"><span>Your name</span><input name="name" required autocomplete="name"></label>
+        <label class="field"><span>Your email</span><input type="email" name="email" required autocomplete="email"></label>
+        <label class="field"><span>Notes (optional)</span><textarea name="notes" placeholder="Shipping country, deadline, anything else"></textarea></label>
+        <div class="row">
+          <button class="btn" type="submit">Send order</button>
+          <button class="btn btn--ghost" type="button" id="copyOrder">Copy order text</button>
+        </div>
+        <p class="status" id="orderStatus" role="status"></p>
+      </form>
+    </div>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+/* ============ EDIT ME ============ */
+const CONFIG = {
+  shop: 'Layerhouse',
+  tagline: '3D prints made to order',
+  email: 'orders@example.com',   // where orders are sent (mailto fallback)
+  formEndpoint: '',               // optional: a Formspree-style URL; orders POST here instead of opening email
+  currency: '$',
+  products: [
+    { id:'vase',    name:'Spiral vase',          cat:'Home',     price:24, shape:'vase',    colors:['magenta','cyan','lemon','white'], desc:'Single-wall twist vase, about 18 cm tall.' },
+    { id:'gear',    name:'Gear fidget',          cat:'Desk',     price:18, shape:'gear',    colors:['cyan','lemon','black','magenta'], desc:'A chunky gear that spins on its own axle. Prints assembled.' },
+    { id:'stand',   name:'Phone stand',          cat:'Desk',     price:14, shape:'stand',   colors:['black','white','cyan','lemon'],   desc:'Holds phones up to 8 mm thick, with a cable slot.' },
+    { id:'tray',    name:'Hex desk tray',        cat:'Desk',     price:16, shape:'tray',    colors:['lemon','white','black','green'],  desc:'Stackable tray for clips, coins and SD cards.' },
+    { id:'planter', name:'Succulent planter',    cat:'Home',     price:22, shape:'planter', colors:['white','magenta','cyan','black'], desc:'Drainage hole and matching saucer included.' },
+    { id:'tower',   name:'Dungeon tower',        cat:'Tabletop', price:28, shape:'tower',   colors:['black','white','green','lemon'],  desc:'Tabletop terrain with a removable roof.' },
+    { id:'lamp',    name:'Photo night lamp',     cat:'Home',     price:34, shape:'lamp',    colors:['white','lemon'],                  desc:'Send a photo and it glows through the print when lit.' },
+    { id:'custom',  name:'Custom print',         cat:'Custom',   price:12, shape:'cube',    colors:['magenta','cyan','lemon','white','black'], custom:true, desc:'Send a file or a sketch and I will quote it.' }
+  ]
+};
+/* ================================== */
+
+const COLORS = {
+  magenta:{n:'Magenta',h:'#E8438A'}, cyan:{n:'Cyan',h:'#35D0D9'}, lemon:{n:'Lemon',h:'#F5D547'},
+  white:{n:'Bone white',h:'#F1EFE8'}, black:{n:'Matte black',h:'#2A2F3A'}, green:{n:'Moss',h:'#5BAF6B'}
+};
+const BG = '#DCE4EA';
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const money = n => CONFIG.currency + (Number.isInteger(n) ? n : n.toFixed(2));
+const byId = id => CONFIG.products.find(p=>p.id===id);
+
+/* ---------- product art (procedural, layer-line texture) ---------- */
+const circ=(cx,cy,r)=>`M${cx-r},${cy}a${r},${r} 0 1,0 ${2*r},0a${r},${r} 0 1,0 ${-2*r},0Z`;
+const poly=pts=>'M'+pts.map(p=>p.join(',')).join('L')+'Z';
+const hexP=(cx,cy,r)=>poly([0,1,2,3,4,5].map(i=>{const a=(-90+60*i)*Math.PI/180;return[(cx+r*Math.cos(a)).toFixed(1),(cy+r*Math.sin(a)).toFixed(1)]}));
+function gearP(cx,cy,t,ro,ri){const s=2*Math.PI/t,pts=[];for(let i=0;i<t;i++){const a=i*s;[[ri,-.26],[ro,-.14],[ro,.14],[ri,.26]].forEach(([r,k])=>pts.push([(cx+r*Math.cos(a+k*s)).toFixed(1),(cy+r*Math.sin(a+k*s)).toFixed(1)]))}return poly(pts)}
+const CUBE_TOP='M100,28 L170,64 L100,100 L30,64 Z', CUBE_L='M30,64 L100,100 L100,172 L30,136 Z', CUBE_R='M170,64 L100,100 L100,172 L170,136 Z';
+const SHAPES = {
+  vase:[{d:'M80,30 C60,80 45,130 66,175 L134,175 C155,130 140,80 120,30 Z',l:1}],
+  gear:[{d:gearP(100,100,10,78,63),l:1},{d:circ(100,100,18),f:BG}],
+  stand:[{d:'M30,172 L170,172 L170,150 L112,150 L152,50 L130,42 L86,150 L30,150 Z',l:1}],
+  tray:[{d:hexP(100,100,76),l:1},{d:hexP(100,100,54),f:'rgba(16,27,45,.2)'}],
+  planter:[{d:'M100,92 C92,66 74,52 52,48 C58,72 76,88 100,92 Z',f:'#5BAF6B',l:1},{d:'M100,92 C108,60 128,44 152,42 C148,70 128,88 100,92 Z',f:'#5BAF6B',l:1},{d:'M48,92 L152,92 L138,172 L62,172 Z',l:1}],
+  tower:[{d:'M60,172 L60,72 L76,72 L76,56 L92,56 L92,72 L108,72 L108,56 L124,56 L124,72 L140,72 L140,172 Z',l:1}],
+  lamp:[{d:'M44,172 L44,118 C44,72 70,40 100,40 C130,40 156,72 156,118 L156,172 Z',l:1},{d:'M70,172 L70,120 C70,92 84,72 100,72 C116,72 130,92 130,120 L130,172 Z',f:'rgba(255,255,255,.35)'}],
+  cube:[{d:CUBE_L,l:1},{d:CUBE_L,f:'rgba(0,0,0,.14)'},{d:CUBE_R,l:1},{d:CUBE_R,f:'rgba(0,0,0,.28)'},{d:CUBE_TOP,l:1}]
+};
+function art(shape,fill){
+  const items=SHAPES[shape].map(it=>{
+    const f=it.f||fill, st=it.f&&!it.l?'':' stroke="rgba(16,27,45,.28)" stroke-width="1"';
+    return `<path d="${it.d}" fill="${f}"${st}/>`+(it.l?`<path d="${it.d}" fill="url(#ll)"/>`:'');
+  }).join('');
+  return `<svg class="art" viewBox="0 0 200 200" aria-hidden="true"><ellipse cx="100" cy="176" rx="62" ry="5" fill="rgba(16,27,45,.14)"/>${items}</svg>`;
+}
+
+/* ---------- catalog ---------- */
+const grid=$('#grid'), chips=$('#chips'), countEl=$('#count');
+let filter='All'; const choice={};
+const cats=['All',...new Set(CONFIG.products.map(p=>p.cat))];
+chips.innerHTML=cats.map(c=>`<button type="button" class="chip" data-cat="${c}" aria-pressed="${c===filter}">${c}</button>`).join('');
+chips.addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  filter=b.dataset.cat; $$('.chip',chips).forEach(c=>c.setAttribute('aria-pressed',c===b)); renderGrid();
+});
+function card(p){
+  const sel=choice[p.id]||p.colors[0];
+  return `<article class="card" data-id="${p.id}">
+    <div class="card__art">${art(p.shape,COLORS[sel].h)}</div>
+    <div class="card__body">
+      <h3>${p.name}</h3>
+      <p class="card__desc">${p.desc}</p>
+      <div class="swatches" role="radiogroup" aria-label="Filament color for ${p.name}">
+        ${p.colors.map(c=>`<button type="button" class="sw" role="radio" aria-checked="${c===sel}" aria-label="${COLORS[c].n}" title="${COLORS[c].n}" data-color="${c}" style="--c:${COLORS[c].h}"></button>`).join('')}
+      </div>
+      <p class="card__color">${COLORS[sel].n}</p>
+      <div class="card__foot">
+        <span class="price">${p.custom?'from ':''}${money(p.price)}</span>
+        <button type="button" class="btn btn--sm" data-act="${p.custom?'quote':'add'}">${p.custom?'Request quote':'Add to order'}</button>
+      </div>
+    </div></article>`;
+}
+function renderGrid(){
+  const list=CONFIG.products.filter(p=>filter==='All'||p.cat===filter);
+  grid.innerHTML=list.map(card).join('');
+  countEl.textContent=list.length+(list.length===1?' item':' items');
+}
+grid.addEventListener('click',e=>{
+  const el=e.target.closest('.card'); if(!el) return;
+  const p=byId(el.dataset.id), sw=e.target.closest('.sw');
+  if(sw){
+    choice[p.id]=sw.dataset.color;
+    $('.card__art',el).innerHTML=art(p.shape,COLORS[sw.dataset.color].h);
+    $('.card__color',el).textContent=COLORS[sw.dataset.color].n;
+    $$('.sw',el).forEach(b=>b.setAttribute('aria-checked',b===sw));
+    return;
+  }
+  const act=e.target.closest('[data-act]'); if(!act) return;
+  if(act.dataset.act==='quote') openCustom(); else add(p.id,choice[p.id]||p.colors[0]);
+});
+
+/* ---------- cart ---------- */
+function load(){try{const c=JSON.parse(localStorage.getItem('lh-cart'));return Array.isArray(c)?c.filter(i=>byId(i.id)&&COLORS[i.color]&&i.qty>0):[]}catch(e){return[]}}
+function save(){try{localStorage.setItem('lh-cart',JSON.stringify(cart))}catch(e){}}
+let cart=load();
+const lines=$('#lines'), emptyEl=$('#empty'), checkout=$('#checkout'), fab=$('#fab');
+function add(id,color){
+  const hit=cart.find(i=>i.id===id&&i.color===color);
+  hit?hit.qty++:cart.push({id,color,qty:1});
+  save(); renderCart(); toast(`Added ${byId(id).name}, ${COLORS[color].n}`);
+}
+function totals(){return{n:cart.reduce((a,i)=>a+i.qty,0),sum:cart.reduce((a,i)=>a+i.qty*byId(i.id).price,0)}}
+function renderCart(){
+  const {n,sum}=totals();
+  lines.innerHTML=cart.map((i,ix)=>{const p=byId(i.id);return `<li class="line">
+    <div class="line__art">${art(p.shape,COLORS[i.color].h)}</div>
+    <div class="line__info"><strong>${p.name}</strong><span>${COLORS[i.color].n}, ${money(p.price)} each</span></div>
+    <div class="qty"><button type="button" data-q="-1" data-i="${ix}" aria-label="Remove one ${p.name}">&minus;</button><span>${i.qty}</span><button type="button" data-q="1" data-i="${ix}" aria-label="Add one ${p.name}">+</button></div></li>`}).join('');
+  emptyEl.hidden=n>0; checkout.hidden=n===0;
+  $('#total').textContent=money(sum);
+  fab.hidden=n===0; $('#fabCount').textContent=n; $('#fabTotal').textContent=money(sum);
+  fab.setAttribute('aria-label',`Open your order, ${n} ${n===1?'item':'items'}`);
+}
+lines.addEventListener('click',e=>{
+  const b=e.target.closest('[data-q]'); if(!b) return;
+  const i=cart[+b.dataset.i]; i.qty+=+b.dataset.q;
+  if(i.qty<1) cart.splice(+b.dataset.i,1);
+  save(); renderCart();
+});
+function orderText(name,email,notes){
+  const {sum}=totals();
+  return [`New order for ${CONFIG.shop}`,'',`Name: ${name||'(not given)'}`,`Email: ${email||'(not given)'}`,'','Items',
+    ...cart.map(i=>{const p=byId(i.id);return `- ${i.qty} x ${p.name} (${COLORS[i.color].n}): ${money(i.qty*p.price)}`}),
+    '',`Subtotal: ${money(sum)} (shipping to be quoted)`,notes?`\nNotes: ${notes}`:''].join('\n');
+}
+async function deliver(subject,body,replyTo){
+  if(CONFIG.formEndpoint){
+    try{
+      const r=await fetch(CONFIG.formEndpoint,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({subject,email:replyTo,message:body})});
+      if(r.ok) return 'sent';
+    }catch(e){}
+  }
+  const a=document.createElement('a');
+  a.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  document.body.appendChild(a); a.click(); a.remove();
+  return 'mailto';
+}
+const MAIL_HELP=()=>`Your email app should open with the message filled in. Press send there to finish. If nothing opens, copy the text and email it to ${CONFIG.email}.`;
+$('#orderForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=new FormData(e.target), name=f.get('name').trim(), email=f.get('email').trim(), notes=f.get('notes').trim();
+  const r=await deliver(`Order from ${name}`,orderText(name,email,notes),email);
+  if(r==='sent'){cart=[];save();renderCart();e.target.reset();$('#orderStatus').textContent='';closeCart();toast("Order sent. I'll email you to confirm.")}
+  else $('#orderStatus').textContent=MAIL_HELP();
+});
+$('#copyOrder').addEventListener('click',async()=>{
+  const f=new FormData($('#orderForm')), text=orderText((f.get('name')||'').trim(),(f.get('email')||'').trim(),(f.get('notes')||'').trim());
+  try{await navigator.clipboard.writeText(text)}catch(e){
+    const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(_){}t.remove();
+  }
+  toast('Order text copied');
+});
+$('#customForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=new FormData(e.target), email=f.get('email').trim();
+  const body=`Custom print request\n\nEmail: ${email}\n\n${f.get('what').trim()}${f.get('link')?`\n\nFile: ${f.get('link').trim()}`:''}`;
+  const r=await deliver('Custom print request',body,email);
+  $('#customStatus').textContent=r==='sent'?"Request sent. I'll reply with a quote.":MAIL_HELP();
+  if(r==='sent') e.target.reset();
+});
+
+/* ---------- sheet, toast, nav ---------- */
+let lenis=null, toastT;
+const toastEl=$('#toast');
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('show'),2200)}
+function openCart(){document.body.classList.add('cart-open');lenis&&lenis.stop();document.body.style.overflow='hidden';setTimeout(()=>$('#closeCart').focus(),50)}
+function closeCart(){document.body.classList.remove('cart-open');lenis&&lenis.start();document.body.style.overflow='';fab.focus&&!fab.hidden&&fab.focus({preventScroll:true})}
+fab.addEventListener('click',openCart);
+$('#closeCart').addEventListener('click',closeCart);
+$('#scrim').addEventListener('click',closeCart);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('cart-open'))closeCart()});
+function goTo(el){lenis?lenis.scrollTo(el,{offset:-8}):el.scrollIntoView({behavior:'smooth',block:'start'})}
+function openCustom(){const d=$('#custom-d');d.open=true;goTo(d);setTimeout(()=>$('textarea',d).focus({preventScroll:true}),500)}
+$$('[data-goto]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();goTo($(a.getAttribute('href')))}));
+
+/* ---------- boot ---------- */
+document.title=`${CONFIG.shop} | ${CONFIG.tagline}`;
+$$('.brand').forEach(el=>el.textContent=CONFIG.shop);
+$('#tagline').textContent=CONFIG.tagline;
+$('#yr').textContent=new Date().getFullYear();
+renderGrid(); renderCart();
+
+/* ---------- parallax (GSAP ScrollTrigger + Lenis) ---------- */
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!window.gsap||!window.ScrollTrigger) return;
+  gsap.registerPlugin(ScrollTrigger);
+  const trigger=$('[data-parallax-layers]');
+  const tl=gsap.timeline({scrollTrigger:{trigger,start:'0% 0%',end:'100% 0%',scrub:0}});
+  [{layer:'1',yPercent:70},{layer:'2',yPercent:55},{layer:'3',yPercent:40},{layer:'4',yPercent:10}].forEach((l,i)=>{
+    tl.to(trigger.querySelectorAll(`[data-parallax-layer="${l.layer}"]`),{yPercent:l.yPercent,ease:'none'},i===0?undefined:'<');
+  });
+  if(window.Lenis){
+    lenis=new Lenis();
+    lenis.on('scroll',ScrollTrigger.update);
+    gsap.ticker.add(t=>lenis.raf(t*1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+})();
+</script>
+</body>
+</html>
